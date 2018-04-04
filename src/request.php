@@ -20,7 +20,7 @@ class request {
      */
     public function get($options) {
         $options['method'] = 'GET';
-        return self::send($options);
+        return $this->send($options);
     }
 
     /**
