@@ -25,10 +25,41 @@ class request {
 
     /**
      * POST请求获取数据信息
-     * @param string $value [description]
+     * @param  string $url  提交的URL地址
+     * @param  array  $data 提交的POST数据
+     * @param  string $type 数据提交类型 json array
+     * @return data         返回对应数据
      */
-    public function post($options = '') {
-        return $this->send($options);
+    public function post($url = '', $data = array(), $type = "json") {
+        $ch = curl_init(); //初始化curl
+        switch ($type) {
+        case 'array':
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //不验证证书
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); //不验证证书
+            curl_setopt($ch, CURLOPT_HEADER, 0); //设置header
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); //要求结果为字符串且输出到屏幕上
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_POST, 1); //post提交方式
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+            break;
+        case 'json':
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (compatible; MSIE 5.01; Windows NT 5.0)');
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_AUTOREFERER, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            break;
+        }
+        $data = curl_exec($ch); //运行curl
+        curl_close($ch); //关闭curl
+        return $data;
     }
 
     /**
