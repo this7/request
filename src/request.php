@@ -24,7 +24,7 @@ class request {
     }
 
     /**
-     * POST请求获取数据信息
+     * POST请求获取数据信息 是
      * @param string $value [description]
      */
     public function post($options = '') {
