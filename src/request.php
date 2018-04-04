@@ -24,7 +24,7 @@ class request {
     }
 
     /**
-     * POST请求获取数据信息 是
+     * POST请求获取数据信息
      * @param string $value [description]
      */
     public function post($options = '') {
@@ -32,8 +32,7 @@ class request {
             $options['data'] = http_build_query($options['data']);
         }
         $options = array_merge_recursive($options, array(
-            'method'  => 'POST',
-            'headers' => 0,
+            'method' => 'POST',
         ));
         return $this->send($options);
     }
@@ -47,7 +46,6 @@ class request {
         if (isset($options['data'])) {
             $options['data'] = json_encode($options['data']);
         }
-
         $options = array_merge_recursive($options, array(
             'method'  => 'POST',
             'headers' => array('Content-Type: application/json; charset=utf-8'),
@@ -68,7 +66,7 @@ class request {
         curl_setopt($ch, CURLOPT_URL, $options['url']);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-
+        curl_setopt($ch, CURLOPT_HEADER, 0);
         if (isset($options['headers'])) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, $options['headers']);
         }
@@ -85,6 +83,7 @@ class request {
         $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         $body = json_decode($result, TRUE);
+
         if ($body === NULL) {
             $body = $result;
         }
