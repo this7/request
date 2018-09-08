@@ -19,6 +19,12 @@ class request {
      * @return [type]          [description]
      */
     public function get($options) {
+        #判断第一项是否为字符串
+        if (is_string($options)) {
+            $options = array(
+                "url" => $options,
+            );
+        }
         $options['method'] = 'GET';
         return $this->send($options);
     }
@@ -27,7 +33,14 @@ class request {
      * POST请求获取数据信息
      * @param string $value [description]
      */
-    public function post($options = '') {
+    public function post($options = '', $data = array()) {
+        #判断第一项是否为字符串
+        if (is_string($options)) {
+            $options = array(
+                "url"  => $options,
+                "data" => $data,
+            );
+        }
         if (isset($options['data'])) {
             $options['data'] = http_build_query($options['data']);
         }
